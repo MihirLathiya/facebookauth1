@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:facebookauth/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class LoginFacebook extends StatefulWidget {
 
 class _LoginFacebookState extends State<LoginFacebook> {
   bool isLogin = false;
+  String userEmail = "";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +57,14 @@ class _LoginFacebookState extends State<LoginFacebook> {
         final userData = await FacebookAuth.instance.getUserData();
         print('facebook_login_data:- $userData');
         print('facebook_login_data:- $facebookAuthCredential');
-        // await FirebaseFirestore.instance
-        //     .collection('User')
-        //     .doc(FirebaseAuth.instance.currentUser!.uid)
-        //     .set({
-        //   'image': userData['picture']['data']['url'],
-        //   'name': userData['name'],
-        //   'email': userData['email'],
-        // });
+        await FirebaseFirestore.instance
+            .collection('User')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+          'image': userData['picture']['data']['url'],
+          'name': userData['name'],
+          'email': userData['email'],
+        });
 
         Navigator.push(
           context,
